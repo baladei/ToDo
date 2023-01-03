@@ -50,10 +50,39 @@ function App() {
       },
     });
 
+    setTodos((prevState) => [...prevState, todo]);
+
     setTitle("");
 
     setTime("");
   };
+
+  const handleDelete = async (id) => {
+    await fetch(API + "/todos/" + id, {
+      method: "DELETE"      
+    });
+
+    setTodos((prevState) => prevState.filter((todo) => todo.id !== id));
+  };
+
+  const handleEdit = async (todo) => {
+    todo.done = !todo.done;
+
+    const data = await fetch(API + "/todos/" + todo.id, {
+      method: "PUT",
+      body: JSON.stringify(todo),
+      headers: {
+        "Content-Type": "application/json",
+      },
+  });
+
+    setTodos((prevState) => prevState.map((t) => (t.id === data.id ? (t = data) : t))
+    );
+};
+
+  if(loading) {
+    return <p>Carregando...</p>;
+  }
 
 
   return (
@@ -74,7 +103,7 @@ function App() {
               name="title"
               placeholder="Título de tarefa"
               onChange={(e) => setTitle(e.target.value)}
-              value={title}
+              value={title || ""}
               required
             />
           </div>
@@ -86,7 +115,7 @@ function App() {
               name="time"
               placeholder="Tempo estimado (em horas)"
               onChange={(e) => setTime(e.target.value)}
-              value={time}
+              value={time || ""}
               required
             />
           </div>
@@ -100,7 +129,14 @@ function App() {
         {todos.length === 0 && <p>Não há tarefas!</p>}
         {todos.map((todo) => (
           <div className="todo" key={todo.id}>
-            <p>{todo.title}</p>
+            <h3 className={todos.done ? "todos-done" : ""}>{todo.title}</h3>
+            <p>Duração: {todos.time}</p>
+            <div className='actions'>
+              <span onClick={() => handleEdit(todo)}>
+                {!todo.done ? <BsBookmarkCheck /> : <BsBookmarkCheckFill />}
+              </span>
+              <BsTrash onClick={() => handleDelete(todo.id)}/>
+            </div>
           </div>
         ))}
       </div>
