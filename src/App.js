@@ -103,7 +103,7 @@ function App() {
               name="title"
               placeholder="Título de tarefa"
               onChange={(e) => setTitle(e.target.value)}
-              value={title || ""}
+              value={title}
               required
             />
           </div>
@@ -115,7 +115,7 @@ function App() {
               name="time"
               placeholder="Tempo estimado (em horas)"
               onChange={(e) => setTime(e.target.value)}
-              value={time || ""}
+              value={time}
               required
             />
           </div>
@@ -129,8 +129,8 @@ function App() {
         {todos.length === 0 && <p>Não há tarefas!</p>}
         {todos.map((todo) => (
           <div className="todo" key={todo.id}>
-            <h3 className={todos.done ? "todos-done" : ""}>{todo.title}</h3>
-            <p>Duração: {todos.time}</p>
+            <h3 className={todo.done ? "todo-done" : ""}>{todo.title}</h3>
+            <p>Duração: {todo.time}</p>
             <div className='actions'>
               <span onClick={() => handleEdit(todo)}>
                 {!todo.done ? <BsBookmarkCheck /> : <BsBookmarkCheckFill />}

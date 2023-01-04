@@ -87,7 +87,7 @@ input[type="submit"] {
 }
 
 .todo p {
-    text-align: center;
+    text-align: left;
     font-style: italic;
     font-size: .7em;
     margin-bottom: 1.5em;
